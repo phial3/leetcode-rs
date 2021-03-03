@@ -91,4 +91,21 @@ impl Solutions {
         }
         res_head.next
     }
+
+    pub fn remove_elements(head: Option<Box<ListNode>>, val: i32) -> Option<Box<ListNode>> {
+        let mut head = head;
+        let mut res_head = Box::new(ListNode::new(0));
+        let mut pos = &mut res_head;
+        while let Some(mut node) = head.take() {
+            head = node.next.take();
+            if node.val != val {
+                pos = pos.next.get_or_insert(node);
+            }
+        }
+        res_head.next
+    }
+
+    pub fn delete_duplicates(head: Option<Box<ListNode>>) -> Option<Box<ListNode>> {
+        todo!()
+    }
 }
