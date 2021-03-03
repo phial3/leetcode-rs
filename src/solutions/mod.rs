@@ -106,6 +106,39 @@ impl Solutions {
     }
 
     pub fn delete_duplicates(head: Option<Box<ListNode>>) -> Option<Box<ListNode>> {
-        todo!()
+        let mut head = head;
+        let mut res_head = Box::new(ListNode::new(0));
+        let mut prev: Option<&mut Box<ListNode>> = None;
+        let mut curr = &mut res_head;
+        while let Some(mut node) = head.take() {
+            head = node.next.take();
+            if let Some(prev_node) = prev {
+                if node.val != prev_node.val {
+                    curr = curr.next.get_or_insert(node);
+                }
+            } else {
+                curr = curr.next.get_or_insert(node);
+            }
+            prev = Some(curr);
+        }
+        res_head.next
+    }
+
+    pub fn swap_pairs(head: Option<Box<ListNode>>) -> Option<Box<ListNode>> {
+        let mut head = head;
+        let mut res_head = Box::new(ListNode::new(0));
+        let mut pos = &mut res_head;
+        while head.is_some() && head.as_mut().unwrap().next.is_some() {
+            let mut prev = head.take().unwrap();
+            head = prev.next.take();
+            let mut after = head.take().unwrap();
+            head = after.next.take();
+            pos = pos.next.get_or_insert(after);
+            pos = pos.next.get_or_insert(prev);
+        }
+        if let Some(node) = head.take() {
+            pos.next.get_or_insert(node);
+        }
+        res_head.next
     }
 }

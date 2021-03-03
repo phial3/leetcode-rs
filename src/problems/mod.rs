@@ -24,5 +24,9 @@ impl Problems {
     pub fn delete_duplicates(head: Option<Box<ListNode>>) -> Option<Box<ListNode>> {
         todo!()   
     }
+
+    pub fn swap_pairs(head: Option<Box<ListNode>>) -> Option<Box<ListNode>> {
+        todo!()   
+    }
 }
 
