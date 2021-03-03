@@ -28,5 +28,9 @@ impl Problems {
     pub fn swap_pairs(head: Option<Box<ListNode>>) -> Option<Box<ListNode>> {
         todo!()   
     }
+
+    pub fn rotate_right(head: Option<Box<ListNode>>, k: i32) -> Option<Box<ListNode>> {
+        todo!()
+    }
 }
 

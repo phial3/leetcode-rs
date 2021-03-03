@@ -141,4 +141,38 @@ impl Solutions {
         }
         res_head.next
     }
+
+    pub fn rotate_right(head: Option<Box<ListNode>>, k: i32) -> Option<Box<ListNode>> {
+        if head.is_none() {
+            return head;
+        }
+        let mut head = head;
+        let mut head_pos = head.as_ref();
+        let mut res_head = Box::new(ListNode::new(0));
+        let mut pos = &mut res_head;
+        let mut len = 0;
+        while let Some(node) = head_pos {
+            head_pos = node.next.as_ref();
+            len = len + 1;
+        }
+        let i = k % len;
+        for _ in 0..(len - i) {
+            if let Some(mut node) = head.take() {
+                head = node.next.take();
+                pos = pos.next.get_or_insert(node);
+            } else {
+                panic!()
+            }
+        }
+        pos = &mut res_head;
+        while let Some(mut node) = head.take() {
+            head = node.next.take();
+            let temp = pos.next.take();
+            pos = pos.next.get_or_insert(node);
+            if let Some(node) = temp {
+                pos.next.get_or_insert(node);
+            }
+        }
+        res_head.next
+    }
 }
