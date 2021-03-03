@@ -2,6 +2,11 @@
 //! 
 
 use super::list_node::ListNode;
+use super::tree_node::TreeNode;
+use std::{
+    rc::Rc,
+    cell::RefCell
+};
 pub struct Problems;
 
 impl Problems {
@@ -30,6 +35,22 @@ impl Problems {
     }
 
     pub fn rotate_right(head: Option<Box<ListNode>>, k: i32) -> Option<Box<ListNode>> {
+        todo!()
+    }
+
+    pub fn is_same_tree(p: Option<Rc<RefCell<TreeNode>>>, q: Option<Rc<RefCell<TreeNode>>>) -> bool {
+        todo!()   
+    }
+
+    pub fn invert_tree(root: Option<Rc<RefCell<TreeNode>>>) -> Option<Rc<RefCell<TreeNode>>> {
+        todo!()
+    }
+
+    pub fn is_symmetric(root: Option<Rc<RefCell<TreeNode>>>) -> bool {
+        todo!()
+    }
+
+    pub fn merge_trees(root1: Option<Rc<RefCell<TreeNode>>>, root2: Option<Rc<RefCell<TreeNode>>>) -> Option<Rc<RefCell<TreeNode>>> {
         todo!()
     }
 }

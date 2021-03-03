@@ -2,6 +2,12 @@
 //! 
 
 use super::list_node::ListNode;
+use super::tree_node::TreeNode;
+use std::{
+    rc::Rc,
+    cell::RefCell
+};
+
 pub struct Solutions;
 
 impl Solutions {
@@ -174,5 +180,63 @@ impl Solutions {
             }
         }
         res_head.next
+    }
+
+    pub fn is_same_tree(p: Option<Rc<RefCell<TreeNode>>>, q: Option<Rc<RefCell<TreeNode>>>) -> bool {
+        match (p, q) {
+            (None, None) => true,
+            (Some(p_node), Some(q_node)) => {
+                let p = p_node.borrow();
+                let q = q_node.borrow();
+                p.val == q.val
+                    && Self::is_same_tree(p.left.clone(), q.left.clone())
+                    && Self::is_same_tree(p.right.clone(), q.right.clone())
+            },
+            _ => false
+        }   
+    }
+
+    pub fn invert_tree(mut root: Option<Rc<RefCell<TreeNode>>>) -> Option<Rc<RefCell<TreeNode>>> {
+        Self::inver(&mut root);
+        root
+    }
+
+    pub fn inver(root: &mut Option<Rc<RefCell<TreeNode>>>) {
+        if let Some(node) = root {
+            let mut node = node.borrow_mut();
+            Self::inver(&mut node.left);
+            Self::inver(&mut node.right);
+            
+            let left = std::mem::replace(&mut node.left, None);
+            let right = std::mem::replace(&mut node.right, left);
+            let _ = std::mem::replace(&mut node.left, right);
+        }
+    }
+
+    pub fn is_symmetric(root: Option<Rc<RefCell<TreeNode>>>) -> bool {
+        fn recursive(p: Option<&Rc<RefCell<TreeNode>>>, q: Option<&Rc<RefCell<TreeNode>>>) -> bool {
+            match (p, q) {
+                (None, None) => true,
+                (Some(left), Some(right)) => {
+                    let left = left.borrow();
+                    let right = right.borrow();
+                    left.val == right.val
+                        && recursive(left.left.as_ref(), right.right.as_ref())
+                        && recursive(left.right.as_ref(), right.left.as_ref())
+                },
+                _ => false
+            }
+        }
+        match root {
+            None => true,
+            Some(node) => {
+                let node = node.borrow();
+                recursive(node.left.as_ref(), node.right.as_ref())
+            }
+        }
+    }
+
+    pub fn merge_trees(root1: Option<Rc<RefCell<TreeNode>>>, root2: Option<Rc<RefCell<TreeNode>>>) -> Option<Rc<RefCell<TreeNode>>> {
+        
     }
 }

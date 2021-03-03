@@ -3,6 +3,7 @@
 //! TODO: docs
 
 pub mod list_node;
+pub mod tree_node;
 pub mod problems;
 pub mod solutions;
 
