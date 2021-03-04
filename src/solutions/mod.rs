@@ -321,6 +321,44 @@ impl Solutions {
     }
 
     pub fn add_one_row(root: Option<Rc<RefCell<TreeNode>>>, v: i32, d: i32) -> Option<Rc<RefCell<TreeNode>>> {
-        todo!()
+        fn recursive(root: &mut Option<Rc<RefCell<TreeNode>>>, val: i32, depth: i32, n: i32) {
+            if let Some(node) = root {
+                let mut node = node.borrow_mut();
+                let mut left = node.left.clone();
+                let mut right = node.right.clone();
+                if depth == n - 1 {
+                    node.left = Some(
+                        Rc::new(RefCell::new(TreeNode {
+                            val,
+                            left,
+                            right: None,
+                        }))
+                    );
+                    node.right = Some(
+                        Rc::new(RefCell::new(TreeNode {
+                            val,
+                            left: None,
+                            right,
+                        }))
+                    );
+                } else {
+                    recursive(&mut left, val, depth + 1, n);
+                    recursive(&mut right, val, depth + 1, n);
+                }
+            }
+        }
+        if d == 1 {
+            let res = Some(
+                Rc::new(RefCell::new(TreeNode {
+                    val: v,
+                    left: root.clone(),
+                    right: None
+                }))
+            );
+            return  res;
+        }
+        let mut root = root;
+        recursive(&mut root, v, 1, d);
+        root
     }
 }
