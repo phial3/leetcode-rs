@@ -236,7 +236,91 @@ impl Solutions {
         }
     }
 
-    pub fn merge_trees(root1: Option<Rc<RefCell<TreeNode>>>, root2: Option<Rc<RefCell<TreeNode>>>) -> Option<Rc<RefCell<TreeNode>>> {
-        
+    pub fn merge_trees(mut root1: Option<Rc<RefCell<TreeNode>>>, mut root2: Option<Rc<RefCell<TreeNode>>>) -> Option<Rc<RefCell<TreeNode>>> {
+        fn recursive(p: &mut Option<Rc<RefCell<TreeNode>>>, q: &mut Option<Rc<RefCell<TreeNode>>>) {
+            match (&p, &q) {
+                (Some(left), Some(right)) => {
+                    let mut left = left.borrow_mut();
+                    let mut right = right.borrow_mut();
+                    left.val += right.val;
+                    recursive(&mut left.left, &mut right.left);
+                    recursive(&mut left.right, &mut right.right);
+                },
+                (None, Some(_)) => {
+                     *p = q.take();
+                },
+                _ => {}
+            }
+        }
+        recursive(&mut root1, &mut root2);
+        root1
+    }
+
+    pub fn search_bst(root: Option<Rc<RefCell<TreeNode>>>, val: i32) -> Option<Rc<RefCell<TreeNode>>> {
+        fn recursive(node: &Option<Rc<RefCell<TreeNode>>>, val: i32) -> Option<Rc<RefCell<TreeNode>>> {
+            if let Some(n) = &node {
+                if n.borrow().val == val {
+                    return node.clone();
+                }
+                if n.borrow().val < val {
+                    return recursive(&mut n.borrow_mut().right, val);
+                } else {
+                    return recursive(&mut n.borrow_mut().left, val);
+                }
+            } else {
+                None
+            }
+        }
+        recursive(&root, val)
+    }
+
+    pub fn prune_tree(root: Option<Rc<RefCell<TreeNode>>>) -> Option<Rc<RefCell<TreeNode>>> {
+        fn need_remove(root: Option<&Rc<RefCell<TreeNode>>>) -> bool {
+            match root {
+                None => true,
+                Some(node) => {
+                    if node.borrow().val == 1 {
+                        return false;
+                    } else {
+                        return need_remove(node.borrow().left.as_ref())
+                            && need_remove(node.borrow().right.as_ref());
+                    }
+                }
+            }
+        }
+        fn new_tree(root: Option<&Rc<RefCell<TreeNode>>>) -> Option<Rc<RefCell<TreeNode>>> {
+            if !need_remove(root) {
+                if let Some(node) = root.clone() {
+                    let new_root = Rc::new(RefCell::new(TreeNode::new(node.borrow().val)));
+                    new_root.borrow_mut().left = new_tree(node.borrow().left.as_ref());
+                    new_root.borrow_mut().right = new_tree(node.borrow().right.as_ref());
+                    Some(new_root)
+                } else {
+                    None
+                }
+            } else {
+                None
+            }
+        }
+        new_tree(root.as_ref())
+    }
+
+    pub fn convert_bst(mut root: Option<Rc<RefCell<TreeNode>>>) -> Option<Rc<RefCell<TreeNode>>> {
+        fn recursive(root: &mut Option<Rc<RefCell<TreeNode>>>, sum: &mut i32) {
+            if let Some(node) = root {
+                let mut node = node.borrow_mut();
+                recursive(&mut node.right, sum);
+                node.val += *sum;
+                *sum = node.val;
+                recursive(&mut node.left, sum);
+            }
+        }
+        let mut sum = 0;
+        recursive(&mut root, &mut sum);
+        root
+    }
+
+    pub fn add_one_row(root: Option<Rc<RefCell<TreeNode>>>, v: i32, d: i32) -> Option<Rc<RefCell<TreeNode>>> {
+        todo!()
     }
 }
