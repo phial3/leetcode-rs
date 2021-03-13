@@ -130,6 +130,39 @@ impl Solutions {
         res_head.next
     }
 
+    pub fn delete_duplicates_2(head: Option<Box<ListNode>>) -> Option<Box<ListNode>> {
+        if head.is_none() || head.as_ref().unwrap().next.is_none() {
+            return head;
+        }
+        let mut head = head;
+        let mut res_head = Box::new(ListNode::new(0));
+        let mut prev = None;
+        let mut curr = &mut res_head;
+        let mut num = 0;
+        while let Some(mut node) = head.take() {
+            head = node.next.take();
+            if prev.is_none() {
+                prev = Some(node);
+            } else {
+                if node.val != prev.as_ref().unwrap().val {
+                    if num == 0 {
+                        let prev_node = prev.take().unwrap();
+                        curr = curr.next.get_or_insert(prev_node);
+                    }
+                    if head.is_none() {
+                        curr = curr.next.get_or_insert(node);
+                    } else {
+                        prev = Some(node);
+                        num = 0;
+                    }
+                } else {
+                    num += 1;
+                }
+            }
+        }
+        res_head.next
+    }
+
     pub fn swap_pairs(head: Option<Box<ListNode>>) -> Option<Box<ListNode>> {
         let mut head = head;
         let mut res_head = Box::new(ListNode::new(0));
@@ -361,4 +394,5 @@ impl Solutions {
         recursive(&mut root, v, 1, d);
         root
     }
+
 }

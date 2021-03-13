@@ -10,43 +10,43 @@ use std::{
 pub struct Problems;
 
 impl Problems {
-    pub fn reverse_list(head: Option<Box<ListNode>>) -> Option<Box<ListNode>> {
+    pub fn reverse_list(_head: Option<Box<ListNode>>) -> Option<Box<ListNode>> {
         todo!()
     }
 
-    pub fn middle_node(head: Option<Box<ListNode>>) -> Option<Box<ListNode>> {
+    pub fn middle_node(_head: Option<Box<ListNode>>) -> Option<Box<ListNode>> {
         todo!()
     }
 
-    pub fn merge_two_lists(l1: Option<Box<ListNode>>, l2: Option<Box<ListNode>>) -> Option<Box<ListNode>> {
+    pub fn merge_two_lists(_l1: Option<Box<ListNode>>, _l2: Option<Box<ListNode>>) -> Option<Box<ListNode>> {
         todo!()   
     }
     
-    pub fn remove_elements(head: Option<Box<ListNode>>, val: i32) -> Option<Box<ListNode>> {
+    pub fn remove_elements(_head: Option<Box<ListNode>>, _val: i32) -> Option<Box<ListNode>> {
         todo!()
     }
 
-    pub fn delete_duplicates(head: Option<Box<ListNode>>) -> Option<Box<ListNode>> {
+    pub fn delete_duplicates(_head: Option<Box<ListNode>>) -> Option<Box<ListNode>> {
         todo!()   
     }
 
-    pub fn swap_pairs(head: Option<Box<ListNode>>) -> Option<Box<ListNode>> {
+    pub fn swap_pairs(_head: Option<Box<ListNode>>) -> Option<Box<ListNode>> {
         todo!()   
     }
 
-    pub fn rotate_right(head: Option<Box<ListNode>>, k: i32) -> Option<Box<ListNode>> {
+    pub fn rotate_right(_head: Option<Box<ListNode>>, _k: i32) -> Option<Box<ListNode>> {
         todo!()
     }
 
-    pub fn is_same_tree(p: Option<Rc<RefCell<TreeNode>>>, q: Option<Rc<RefCell<TreeNode>>>) -> bool {
+    pub fn is_same_tree(_p: Option<Rc<RefCell<TreeNode>>>, _q: Option<Rc<RefCell<TreeNode>>>) -> bool {
         todo!()   
     }
 
-    pub fn invert_tree(root: Option<Rc<RefCell<TreeNode>>>) -> Option<Rc<RefCell<TreeNode>>> {
+    pub fn invert_tree(_root: Option<Rc<RefCell<TreeNode>>>) -> Option<Rc<RefCell<TreeNode>>> {
         todo!()
     }
 
-    pub fn is_symmetric(root: Option<Rc<RefCell<TreeNode>>>) -> bool {
+    pub fn is_symmetric(_root: Option<Rc<RefCell<TreeNode>>>) -> bool {
         todo!()
     }
 
@@ -67,6 +67,10 @@ impl Problems {
     }
 
     pub fn add_one_row(root: Option<Rc<RefCell<TreeNode>>>, v: i32, d: i32) -> Option<Rc<RefCell<TreeNode>>> {
+        todo!()
+    }
+
+    pub fn delete_duplicates_2(head: Option<Box<ListNode>>) -> Option<Box<ListNode>> {
         todo!()
     }
 }
