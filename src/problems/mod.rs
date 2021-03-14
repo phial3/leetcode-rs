@@ -73,5 +73,9 @@ impl Problems {
     pub fn delete_duplicates_2(head: Option<Box<ListNode>>) -> Option<Box<ListNode>> {
         todo!()
     }
+
+    pub fn reverse_between(head: Option<Box<ListNode>>, left: i32, right: i32) -> Option<Box<ListNode>> {
+        todo!()
+    }
 }
 

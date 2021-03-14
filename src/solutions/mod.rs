@@ -3,10 +3,7 @@
 
 use super::list_node::ListNode;
 use super::tree_node::TreeNode;
-use std::{
-    rc::Rc,
-    cell::RefCell
-};
+use std::{cell::RefCell, collections::VecDeque, rc::Rc};
 
 pub struct Solutions;
 
@@ -395,4 +392,35 @@ impl Solutions {
         root
     }
 
+    pub fn reverse_between(head: Option<Box<ListNode>>, left: i32, right: i32) -> Option<Box<ListNode>> {
+        let mut head = head;
+        let mut res_head = Box::new(ListNode::new(0));
+        let mut pos = res_head.as_mut();
+        let mut counter = 1;
+        let mut nodes = Vec::new();
+        while let Some(mut node) = head.take() {
+            head = node.next.take();
+            if counter < left {
+                pos = pos.next.get_or_insert(node);
+                counter += 1;
+            } else if counter <= right {
+                nodes.push(node);
+                if counter == right {
+                    break;
+                } else {
+                    counter += 1;
+                }
+            } else {
+                unreachable!()
+            }
+        }
+        while let Some(node) = nodes.pop() {
+            pos = pos.next.get_or_insert(node);
+        }
+        while let Some(mut node) = head.take() {
+            head = node.next.take();
+            pos = pos.next.get_or_insert(node);
+        }
+        res_head.next
+    }
 }
