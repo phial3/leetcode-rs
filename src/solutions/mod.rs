@@ -1,9 +1,11 @@
 //! Solutions in LeetCode
 //! 
 
+mod lru;
+
 use super::list_node::ListNode;
 use super::tree_node::TreeNode;
-use std::{cell::RefCell, collections::VecDeque, rc::Rc};
+use std::{cell::RefCell, rc::Rc};
 
 pub struct Solutions;
 
@@ -422,5 +424,116 @@ impl Solutions {
             pos = pos.next.get_or_insert(node);
         }
         res_head.next
+    }
+
+    pub fn construct_maximum_binary_tree(nums: Vec<i32>) -> Option<Rc<RefCell<TreeNode>>> {
+        fn recursive(nums: Vec<i32>) -> Option<Rc<RefCell<TreeNode>>> {
+            if nums.len() == 0 {
+                return None;
+            }
+            let mut max = nums[0];
+            let mut max_pos = 0;
+            for i in 0..nums.len() {
+                if nums[i] > max {
+                    max = nums[i];
+                    max_pos = i;
+                }
+            }
+            
+            let root = Rc::new(RefCell::new(TreeNode::new(max)));
+            root.borrow_mut().left = recursive(nums[0..max_pos].to_vec());
+            if max_pos < nums.len() - 1 {
+                root.borrow_mut().right = recursive(nums[(max_pos+1)..].to_vec());
+            }
+            Some(root)
+        }
+
+        recursive(nums)
+    }
+
+    pub fn int_to_roman(num: i32) -> String {
+        // ref: https://leetcode.com/problems/integer-to-roman/discuss/1016135/Rust%3A-vector-solution
+        let m = [1000, 900, 500, 400, 100, 90, 50, 40, 10, 9, 5, 4, 1];
+        let n = ["M", "CM", "D", "CD", "C", "XC", "L", "XL", "X", "IX", "V", "IV", "I"];
+
+        let (mut num, mut s) = (num, String::new());
+        for i in 0..13 {
+            let mut j = num / m[i];
+            num %= m[i];
+            while j > 0 {
+                s.push_str(n[i]);
+                j -= 1;
+            }
+        }
+        s
+    }
+
+    #[allow(non_snake_case)]
+    pub fn LRU(&self, operators: Vec<Vec<i32>>, k: i32) -> Vec<i32> {
+        assert!(k > 0);
+        struct Lru {
+            inner: Vec<((i32, i32), i32)>,
+            max_size: usize
+        }
+        impl Lru {
+            pub fn new(max_size: usize) -> Self {
+                Self {
+                    inner: Vec::new(),
+                    max_size
+                }
+            }
+            pub fn find_retire(&self) -> usize {
+                let mut index = 0;
+                let mut longest = self.inner[0].1;
+                for (i, (_, time)) in self.inner.iter().enumerate() {
+                    if *time > longest {
+                        longest = *time;
+                        index = i;
+                    }
+                }
+                index
+            }
+            pub fn all_add(&mut self) {
+                for (_, time) in &mut self.inner {
+                    *time += 1;
+                }
+            }
+            pub fn set(&mut self, val: (i32, i32)) {
+                self.all_add();
+                if self.inner.len() >= self.max_size {
+                    let index = self.find_retire();
+                    self.inner[index] = (val, 0);
+                } else {
+                    self.inner.push((val, 0));
+                }
+            }
+            pub fn get(&mut self, key: i32) -> i32 {
+                self.all_add();
+                for ((k, v), time) in &mut self.inner {
+                    if *k == key {
+                        *time = 0;
+                        return *v;
+                    }
+                }
+                -1
+            }
+        }
+        let mut res = Vec::new();
+        let mut lru = Lru::new(k as usize);
+        for ops in operators {
+            assert!(ops.len() >= 2);
+            match ops[0] {
+                1 => {
+                    assert_eq!(ops.len(), 3);
+                    lru.set((ops[1], ops[2]));
+                },
+                2 => {
+                    assert_eq!(ops.len(), 2);
+                    res.push(lru.get(ops[1]));
+                },
+                _ => panic!("error input!")
+            }
+        }
+        res
     }
 }
