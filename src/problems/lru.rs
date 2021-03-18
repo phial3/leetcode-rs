@@ -31,16 +31,17 @@ impl LRUCache {
     
     fn put(&mut self, key: i32, value: i32) {
         self.all_add();
+        for ((k, v), time) in &mut self.inner {
+            if *k == key {
+                *v = value;
+                *time = 0;
+                return;
+            }
+        }  
         if self.inner.len() >= self.max_size {
             let index = self.find_retire();
             self.inner[index] = ((key, value), 0);
         } else {
-            for ((k, v), _) in &mut self.inner {
-                if *k == key {
-                    *v = value;
-                    return;
-                }
-            }            
             self.inner.push(((key, value), 0));
         }
     }
