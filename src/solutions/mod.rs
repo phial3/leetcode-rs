@@ -536,4 +536,56 @@ impl Solutions {
         }
         res
     }
+
+    pub fn three_sum(mut nums: Vec<i32>) -> Vec<Vec<i32>> {
+        // Ref: https://leetcode.com/problems/3sum/discuss/218353/Rust-32ms
+        let mut res = Vec::with_capacity(nums.len() / 3);
+        if nums.len() < 3 {
+            return res;
+        }
+        nums.sort();
+        let mut left;
+        let mut right;
+        let mut result;
+
+        for (i, num) in nums.iter().enumerate() {
+            if *num > 0 {
+                break;
+            }
+            left = i + 1;
+            right = nums.len() - 1;
+            while left < right {
+                result = *num + nums[left] + nums[right];
+                if result == 0 {
+                    // 检查是否有重复
+                    let mut has_duplicates = false;
+                    let mut rev = res.len() as i32 - 1;
+                    let mut prev;
+                    while rev >= 0 {
+                        prev = &res[rev as usize];
+                        if prev[0] == *num {
+                            if prev[1] == nums[left] && prev[2] == nums[right] {
+                                has_duplicates = true;
+                                break;
+                            }
+                        } else {
+                            // 前面不可能有一样的
+                            break;
+                        }
+                        rev -= 1;
+                    }
+                    if !has_duplicates {
+                        res.push(vec![*num, nums[left], nums[right]]);
+                    }
+                    left += 1;
+                    right -= 1;
+                } else if result > 0 {
+                    right -= 1;
+                } else {
+                    left += 1;
+                }
+            }
+        }
+        res
+    }
 }

@@ -72,5 +72,8 @@ impl Problems {
     pub fn LRU(&self, operators: Vec<Vec<i32>>, k: i32) -> Vec<i32> {
         todo!()
     }
+    pub fn three_sum(nums: Vec<i32>) -> Vec<Vec<i32>> {
+        todo!()
+    }
 }
 
