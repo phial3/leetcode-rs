@@ -78,5 +78,14 @@ impl Problems {
     pub fn longest_palindrome(s: String) -> String {
         todo!()
     }
+    pub fn max_area(height: Vec<i32>) -> i32 {
+        todo!()
+    }
+    pub fn convert(s: String, num_rows: i32) -> String {
+        todo!()
+    }
+    pub fn letter_combinations(digits: String) -> Vec<String> {
+        todo!()
+    }
 }
 

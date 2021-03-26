@@ -622,4 +622,93 @@ impl Solutions {
         }
         String::from_utf8(return_s).unwrap()
     }
+
+    pub fn max_area(height: Vec<i32>) -> i32 {
+        // ref: https://leetcode-cn.com/problems/container-with-most-water/solution/rust-on-shuang-zhi-zhen-by-jack_/
+        let mut left = 0;
+        let mut right = height.len() - 1;
+        let mut ans = -1;
+        while left < right {
+            ans = ans.max(height[left].min(height[right]) * (right as i32 - left as i32));
+            if height[left] < height[right] { left += 1;}
+            else { right -= 1;}
+        }
+        ans
+    }
+    
+    pub fn convert(s: String, num_rows: i32) -> String {
+        if num_rows == 1 { return s; }
+        let mut res_s = String::new();
+        let mut res = Vec::new();
+        for _ in 0..num_rows {
+            res.push(Vec::new());
+        }
+        let mut pos = 0;
+        let mut up = false;
+        let mut data = s.as_bytes().to_vec();
+        while let Some(_) = data.first() {
+            let c = data.remove(0);
+            res[pos].push(c);
+            if pos == 0 {
+                pos += 1;
+                up = false;
+            } else if pos == num_rows as usize - 1 {
+                pos -= 1;
+                up = true;
+            } else {
+                if up {
+                    pos -= 1;
+                } else {
+                    pos += 1;
+                }
+            }
+        }
+        for v in res {
+            for c in v {
+                res_s.push(c as char);
+            }
+        }
+        res_s
+    }
+
+    pub fn letter_combinations(digits: String) -> Vec<String> {
+        use std::collections::HashMap;
+        fn backtrack(
+            res_vec: &mut Vec<String>,
+            map: &HashMap<char, String>,
+            digits: &String,
+            index: usize,
+            res: &mut String
+        ) {
+            if index == digits.len() {
+                res_vec.push(String::from(res.as_str()));
+            } else {
+                let digit  = digits.as_bytes()[index] as char;
+                if let Some(s) = map.get(&digit) {
+                    let new_s = String::from(s.as_str());
+                    for ch in new_s.chars() {
+                        res.push(ch);
+                        backtrack(res_vec, map, digits, index + 1, res);
+                        res.remove(index);
+                    }
+                }
+            }
+        }
+        if digits.len() == 0 {
+            return Vec::new();
+        }
+        let mut map: HashMap<char, String> = HashMap::new();
+        map.insert('2', "abc".to_string());
+        map.insert('3', "def".to_string());
+        map.insert('4', "ghi".to_string());
+        map.insert('5', "jkl".to_string());
+        map.insert('6', "mno".to_string());
+        map.insert('7', "pqrs".to_string());
+        map.insert('8', "tuv".to_string());
+        map.insert('9', "wxyz".to_string());
+        let mut res_vec = Vec::new();
+        let mut res = String::new();
+        backtrack(&mut res_vec, &map, &digits, 0, &mut res);
+        res_vec
+    }
 }
