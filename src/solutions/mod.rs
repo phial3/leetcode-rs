@@ -588,4 +588,38 @@ impl Solutions {
         }
         res
     }
+
+    pub fn longest_palindrome(s: String) -> String {
+        let data = s.as_bytes();
+        let c = '#' as u8;
+        let mut new_s = Vec::new();
+        for i in 0..data.len() {
+            new_s.push(c);
+            new_s.push(data[i]);
+        }
+        new_s.push(c);
+        let mut res = Vec::new();
+        for i in 0..new_s.len() {
+            let mut left = i as i32 - 1;
+            let mut right = i as i32 + 1;
+            while left >= 0 && right < new_s.len() as i32{
+                if new_s[left as usize] == new_s[right as usize] {
+                    left -= 1;
+                    right += 1;
+                } else {
+                    break;
+                }
+            }
+            if right - left - 1 > res.len() as i32 {
+                res = new_s[(left+1) as usize..(right-1) as usize].to_vec();
+            }
+        }
+        let mut return_s = Vec::new();
+        while let Some(item) = res.pop() {
+            if item != '#' as u8 {
+                return_s.push(item);
+            }
+        }
+        String::from_utf8(return_s).unwrap()
+    }
 }

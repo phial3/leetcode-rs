@@ -75,5 +75,8 @@ impl Problems {
     pub fn three_sum(nums: Vec<i32>) -> Vec<Vec<i32>> {
         todo!()
     }
+    pub fn longest_palindrome(s: String) -> String {
+        todo!()
+    }
 }
 
