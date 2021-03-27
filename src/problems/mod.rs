@@ -87,5 +87,11 @@ impl Problems {
     pub fn letter_combinations(digits: String) -> Vec<String> {
         todo!()
     }
+    pub fn add_two_numbers(l1: Option<Box<ListNode>>, l2: Option<Box<ListNode>>) -> Option<Box<ListNode>> {
+        todo!()
+    }
+    pub fn length_of_longest_substring(s: String) -> i32 {
+        todo!()
+    }
 }
 

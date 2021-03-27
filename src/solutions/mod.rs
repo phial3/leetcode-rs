@@ -711,4 +711,78 @@ impl Solutions {
         backtrack(&mut res_vec, &map, &digits, 0, &mut res);
         res_vec
     }
+
+    pub fn add_two_numbers(l1: Option<Box<ListNode>>, l2: Option<Box<ListNode>>) -> Option<Box<ListNode>> {
+        let mut head_1 = l1;
+        let mut head_2 = l2;
+        let mut res = ListNode::new(0);
+        let mut pos = &mut res;
+        let mut cin = 0;
+        // while let (Some(mut node_1), Some(mut node_2)) = (head_1.take(), head_2.take()) {
+        //     head_1 = node_1.next.take();
+        //     head_2 = node_2.next.take();
+        //     let mut sum = cin + node_1.val + node_2.val;
+        //     cin = sum / 10;
+        //     sum %= 10;
+        //     let node = ListNode::new(sum);
+        //     pos = pos.next.get_or_insert(Box::new(node));
+        // }
+        // while let Some(mut node) = head_1.take() {
+        //     head_1 = node.next.take();
+        //     let mut sum = cin + node.val;
+        //     cin = sum / 10;
+        //     sum %= 10;
+        //     let new_node = ListNode::new(sum);
+        //     pos = pos.next.get_or_insert(Box::new(new_node));
+        // }
+        // while let Some(mut node) = head_2.take() {
+        //     head_2 = node.next.take();
+        //     let mut sum = cin + node.val;
+        //     cin = sum / 10;
+        //     sum %= 10;
+        //     let new_node = ListNode::new(sum);
+        //     pos = pos.next.get_or_insert(Box::new(new_node));
+        // }
+        while head_1.is_some() || head_2.is_some() {
+            let (mut val_1, mut val_2) = (0, 0);
+            if let Some(mut node_1) = head_1.take() {
+                head_1 = node_1.next.take();
+                val_1 = node_1.val;
+            }
+            if let Some(mut node_2) = head_2.take() {
+                head_2 = node_2.next.take();
+                val_2 = node_2.val;
+            }
+            let mut sum = cin + val_1 + val_2;
+            cin = sum / 10;
+            sum %= 10;
+            let node = ListNode::new(sum);
+            pos = pos.next.get_or_insert(Box::new(node));
+        }
+        if cin == 1 {
+            let node = ListNode::new(cin);
+            pos.next.get_or_insert(Box::new(node));
+        }
+        res.next
+    }
+
+    pub fn length_of_longest_substring(s: String) -> i32 {
+        if s.is_empty() || s.len() == 1 {
+            return s.len() as i32;
+        }
+        let data = s.as_bytes();
+        let mut left = 0;
+        let mut right = 1;
+        let mut max = 1;
+        while right < s.len() {
+            if data[left..right].contains(&data[right]) {
+                max = max.max(right - left);
+                left += 1;
+            } else {
+                max = max.max(right - left + 1);
+                right += 1;
+            }
+        }
+        max as i32
+    }
 }
