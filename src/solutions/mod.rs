@@ -5,7 +5,7 @@ mod lru;
 
 use super::list_node::ListNode;
 use super::tree_node::TreeNode;
-use std::{cell::RefCell, rc::Rc};
+use std::{ascii::AsciiExt, cell::RefCell, rc::Rc};
 
 pub struct Solutions;
 
@@ -784,5 +784,386 @@ impl Solutions {
             }
         }
         max as i32
+    }
+
+    pub fn find_median_sorted_arrays(nums1: Vec<i32>, nums2: Vec<i32>) -> f64 {
+        let v = vec![nums1, nums2];
+        let mut v: Vec<&i32> = v.iter().flat_map(|x| x.iter()).collect();
+        v.sort();
+        let len = v.len();
+        if len % 2 == 0 {
+            return (*v[len / 2 - 1] as f64 + *v[len / 2] as f64) / 2.0;
+        } else {
+            return *v[len / 2] as f64;
+        }
+    }
+
+    pub fn remove_nth_from_end(head: Option<Box<ListNode>>, n: i32) -> Option<Box<ListNode>> {
+        let mut first = head.as_ref();
+        let mut second = head.as_ref();
+        let mut res = ListNode::new(0);
+        let mut pos = &mut res;
+        for _ in 0..n {
+            first = first.unwrap().next.as_ref();
+        }
+        while first.is_some() {
+            first = first.unwrap().next.as_ref();
+            let val = second.unwrap().val;
+            let node = ListNode::new(val);
+            pos = pos.next.get_or_insert(Box::new(node));
+            second = second.unwrap().next.as_ref();
+        }
+        if second.is_some() {
+            second = second.unwrap().next.as_ref();
+        }
+        while let Some(node) = second {
+            second = node.next.as_ref();
+            let val = node.val;
+            let new_node = ListNode::new(val);
+            pos = pos.next.get_or_insert(Box::new(new_node));
+        }
+        res.next        
+    }
+
+    pub fn trap(height: Vec<i32>) -> i32 {
+        if height.len() < 3 {
+            return  0;
+        }
+        let mut left = 0;
+        let mut right = height.len() - 1;
+        let mut lmax = 0;
+        let mut rmax = 0;
+        let mut res = 0;
+        while left < right {
+            if height[left] < height[right] {
+                if height[left] < lmax {
+                    res += lmax - height[left];
+                } else {
+                    lmax =  height[left]
+                }
+                left += 1;
+            } else {
+                if height[right] < rmax {
+                    res += rmax - height[right];
+                } else {
+                    rmax = height[right];
+                }
+                right -= 1;
+            }
+        }
+        res
+    }
+
+    pub fn search(nums: Vec<i32>, target: i32) -> i32 {
+        let len = nums.len();
+        if len == 0 { return -1; }
+        if len == 1 {
+            if nums[0].eq(&target) {
+                return 0;
+            } else {
+                return -1;
+            }
+        }
+        let mut l = 0;
+        let mut r = len - 1;
+        while l <= r {
+            let mid = (l + r) / 2;
+            if nums[mid] == target {
+                return mid as i32;
+            }
+            if nums[0] <= nums[mid] {
+                if nums[0] <= target && target < nums[mid] {
+                    r = mid - 1;
+                } else {
+                    l = mid + 1;
+                }
+            } else {
+                if nums[mid] < target && target <= nums[len - 1] {
+                    l = mid + 1;
+                } else {
+                    r = mid - 1;
+                }
+            }
+        }
+        return -1;
+    }
+
+    pub fn get_winner(arr: Vec<i32>, k: i32) -> i32 {
+        if k == 1 {
+            return arr[0].max(arr[1]);
+        }
+        let mut count = 1;
+        let mut prev;
+        let mut curr;
+        if arr[0] > arr[1] {
+            prev = 0;
+            curr = 2;
+        } else {
+            prev = 1;
+            curr = 2;
+        }
+        while curr < arr.len() {
+            if arr[curr] > arr[prev] {
+                prev = curr;
+                count = 1;
+            } else {
+                count += 1;
+            }
+            if count >= k { return arr[prev]; }
+            curr += 1;
+        }
+        return arr[prev];
+    }
+
+    pub fn three_sum_closest(mut nums: Vec<i32>, target: i32) -> i32 {
+        let len = nums.len();
+        nums.sort();
+        assert!(len > 2);
+        let mut res = nums[0] + nums[1] + nums[2];
+        for i in 0..len - 2 {
+            let mut l = i + 1;
+            let mut r = len - 1;
+            while l < r {
+                let temp_res = nums[i] + nums[l] + nums[r];
+                if temp_res == target {
+                    return temp_res;
+                } else if temp_res < target {
+                    if target - temp_res < (res - target).abs() {
+                        res = temp_res;
+                    }
+                    l += 1;
+                } else {
+                    if temp_res - target < (res - target).abs() {
+                        res = temp_res;
+                    }
+                    r -= 1;
+                }
+            }
+        }
+        res
+    }
+
+    pub fn generate_parenthesis(n: i32) -> Vec<String> {
+        fn generate(n: i32) -> Vec<String> {
+            let mut idx = 0;
+            let mut v = Vec::new();
+            while idx < n*2 {
+                if idx == 0 {
+                    v.push(String::from("("));
+                    v.push(String::from(")"));
+                } else {
+                    let mut temp_v: Vec<String> = v.iter().map(|s| {
+                        let new_s = format!("{})", s);
+                        new_s
+                    }).collect();
+                    v.iter_mut().for_each(|s| s.push_str("("));
+                    while let Some(s) = temp_v.pop() {
+                        v.push(s);
+                    }                    
+                }
+                idx += 1;
+            }
+            v
+        }
+        fn is_ok(s: &String) -> bool {
+            let mut stack = Vec::new();
+            let mut data = s.as_bytes().to_vec();
+            loop {
+                if let Some(_) = data.first() {
+                    let c = data.remove(0);
+                    if c == '(' as u8 {
+                        stack.push(c);
+                    } else {
+                        if let Some(d) = stack.pop() {
+                            if d == '(' as u8 {
+                                // drop 掉这对
+                            } else {
+                                return false;
+                            }
+                        } else {
+                            return false;
+                        }
+                    }
+                } else {
+                    return stack.is_empty();
+                }
+            }
+        }
+        let v = generate(n);
+        v.iter().filter(|s| is_ok(*s)).map(|s| String::from(s.as_str())).collect()
+    }
+
+    pub fn inorder_traversal(root: Option<Rc<RefCell<TreeNode>>>) -> Vec<i32> {
+        fn recursive(root: &Option<Rc<RefCell<TreeNode>>>, res: &mut Vec<i32>) {
+            if let Some(node) = root {
+                let left = &node.borrow().left;
+                let right = &node.borrow().right;
+                recursive(left, res);
+                let val = node.borrow().val;
+                res.push(val);
+                recursive(right, res);
+            }
+        }
+        let mut res = Vec::new();
+        recursive(&root, &mut res);
+        res
+    }
+
+    pub fn level_order(root: Option<Rc<RefCell<TreeNode>>>) -> Vec<Vec<i32>> {
+        if root.is_none() { return  Vec::new(); }
+        let mut q = std::collections::VecDeque::new();
+        let mut next_q = std::collections::VecDeque::new();
+        q.push_back(root.unwrap());
+        let mut res = Vec::new();
+        loop {
+            let mut v = Vec::new();
+            while let Some(node) = q.pop_front() {
+                v.push(node.borrow().val);
+                let left = node.borrow().left.clone();
+                let right = node.borrow().right.clone();
+                if let Some(l_node) = left {
+                    next_q.push_back(l_node);
+                }
+                if let Some(r_node) = right {
+                    next_q.push_back(r_node);
+                }
+            }
+            assert!(q.is_empty());
+            res.push(v);
+            if next_q.is_empty() { break; }
+            while let Some(node) = next_q.pop_front() {
+                q.push_back(node);
+            }
+        }
+        res
+    }
+
+    pub fn postorder_traversal(root: Option<Rc<RefCell<TreeNode>>>) -> Vec<i32> {
+        // fn recursive(root: &Option<Rc<RefCell<TreeNode>>>, res: &mut Vec<i32>) {
+        //     if let Some(node) = root {
+        //         let left = &node.borrow().left;
+        //         let right = &node.borrow().right;
+        //         recursive(left, res);
+        //         recursive(right, res);
+        //         let val = node.borrow().val;
+        //         res.push(val);
+        //     }
+        // }
+        
+        // let mut res = Vec::new();
+        // recursive(&root, &mut res);
+        // res
+
+        // Ref: https://leetcode-cn.com/problems/binary-tree-postorder-traversal/solution/rust-17xing-by-qweytr_1/
+        if root.is_none() { return Vec::new(); }
+        let mut res = Vec::new();
+        let mut stack = Vec::new();
+        if let Some(root) = root {
+            stack.push(root);
+        }
+        while let Some(root) = stack.pop() {
+            let mut node = root.borrow_mut();
+            res.push(node.val);
+            if let Some(x) = node.left.take() {
+                stack.push(x);
+            }
+            if let Some(x) = node.right.take() {
+                stack.push(x);
+            }
+        }
+        res.reverse();
+        res
+    }
+
+    pub fn my_pow(x: f64, n: i32) -> f64 {
+        fn quick_pow(x: f64, n: i32) -> f64 {
+            if n == 0 { return 1.0; }
+            let y = quick_pow(x, n / 2);
+            if n % 2 == 0 {
+                return y * y;
+            } else {
+                return y * y * x;
+            }
+        }
+        if n >= 0 { return quick_pow(x, n); }
+        else { return 1.0 / quick_pow(x, n); }
+    }
+
+    pub fn max_sub_array(nums: Vec<i32>) -> i32 {
+        let mut max = 0;
+        let mut pos = 0;
+        let mut prev_sum = 0;
+        while pos < nums.len() {
+            if pos == 0 {
+                prev_sum = nums[pos];
+                max = prev_sum;
+                pos += 1;
+            } else {
+                if prev_sum < 0 {
+                    prev_sum = nums[pos];
+                } else {
+                    prev_sum = prev_sum + nums[pos];
+                }
+                max = max.max(prev_sum);
+                pos += 1;
+            }
+        }
+        max
+    }
+
+    pub fn can_jump(nums: Vec<i32>) -> bool {
+        let mut pos = 0;
+        let mut max = 0;
+        while pos < nums.len() {
+            if max < pos { break; }
+            max = max.max(nums[pos] as usize + pos);
+            pos += 1;
+        }
+        max >= nums.len() - 1
+    }
+
+    pub fn construct_arr(a: Vec<i32>) -> Vec<i32> {
+        let len = a.len();
+        let mut b = vec![1; len];
+        let mut t = 1;
+        for i in 1..len {
+            b[i] = b[i - 1] * a[ i - 1];
+        }
+        for i in 1..len {
+            t *= a[len - i];
+            b[len -1 -i] *= t;
+        }
+        b
+    }
+
+    pub fn min_path_sum(grid: Vec<Vec<i32>>) -> i32 {
+        let len_i = grid.len();
+        if  len_i == 0 { return 0; }
+        let len_j = grid[0].len();
+        let mut dp = vec![vec![0; len_j]; len_i];
+        dp[0][0] = grid[0][0];
+        for i in 1..len_i {
+            dp[i][0] = dp[i - 1][0] + grid[i][0];
+        }
+        for j in 1..len_j {
+            dp[0][j] = dp[0][j - 1] + grid[0][j];
+        }
+        for i in 1..len_i {
+            for j in 1..len_j {
+                dp[i][j] = dp[i - 1][j].min(dp[i][j - 1]) + grid[i][j];
+            }
+        }
+        dp[len_i - 1][len_j - 1]
+    }
+
+    pub fn climb_stairs(n: i32) -> i32 {
+        if n == 0 || n == 1 || n ==2 { return n; }
+        let mut dp = vec![0; n as usize];
+        dp[0] = 1;
+        dp[1] = 2;
+        for i in 2..n {
+            dp[i as usize] = dp[i as usize - 2] + dp[i as usize - 1];
+        }
+        dp[n as usize - 1]
     }
 }

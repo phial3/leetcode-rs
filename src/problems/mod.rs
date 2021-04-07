@@ -93,5 +93,50 @@ impl Problems {
     pub fn length_of_longest_substring(s: String) -> i32 {
         todo!()
     }
+    pub fn find_median_sorted_arrays(nums1: Vec<i32>, nums2: Vec<i32>) -> f64 {
+        todo!()
+    }
+    pub fn remove_nth_from_end(head: Option<Box<ListNode>>, n: i32) -> Option<Box<ListNode>> {
+        todo!()
+    }
+    pub fn trap(height: Vec<i32>) -> i32 {
+        todo!()
+    }
+    pub fn search(nums: Vec<i32>, target: i32) -> i32 {
+        todo!()
+    }
+    pub fn get_winner(arr: Vec<i32>, k: i32) -> i32 {
+        todo!()
+    }
+    pub fn three_sum_closest(nums: Vec<i32>, target: i32) -> i32 {
+        todo!()
+    }
+    pub fn generate_parenthesis(n: i32) -> Vec<String> {
+        todo!()
+    }
+    pub fn inorder_traversal(root: Option<Rc<RefCell<TreeNode>>>) -> Vec<i32> {
+        todo!()
+    }
+    pub fn level_order(root: Option<Rc<RefCell<TreeNode>>>) -> Vec<Vec<i32>> {
+        todo!()
+    }
+    pub fn postorder_traversal(root: Option<Rc<RefCell<TreeNode>>>) -> Vec<i32> {
+        todo!()
+    }
+    pub fn my_pow(x: f64, n: i32) -> f64 {
+        todo!()
+    }
+    pub fn max_sub_array(nums: Vec<i32>) -> i32 {
+        todo!()
+    }
+    pub fn can_jump(nums: Vec<i32>) -> bool {
+        todo!()
+    }
+    pub fn construct_arr(a: Vec<i32>) -> Vec<i32> {
+        todo!()
+    }
+    pub fn min_path_sum(grid: Vec<Vec<i32>>) -> i32 {
+        todo!()
+    }
 }
 
