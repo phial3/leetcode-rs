@@ -5,7 +5,7 @@ mod lru;
 
 use super::list_node::ListNode;
 use super::tree_node::TreeNode;
-use std::{ascii::AsciiExt, cell::RefCell, rc::Rc};
+use std::{ascii::AsciiExt, cell::RefCell, rc::Rc, vec};
 
 pub struct Solutions;
 
@@ -1165,5 +1165,88 @@ impl Solutions {
             dp[i as usize] = dp[i as usize - 2] + dp[i as usize - 1];
         }
         dp[n as usize - 1]
+    }
+
+    pub fn merge(intervals: Vec<Vec<i32>>) -> Vec<Vec<i32>> {
+        if intervals.is_empty() { return intervals; }
+        let mut res = Vec::new();
+        let mut intervals = intervals;
+        intervals.sort_by(|a, b| b[0].cmp(&a[0]));
+        let first = intervals.pop().unwrap();
+        res.push(first);
+        while let Some(v) = intervals.pop() {
+            let len = res.len();
+            let right = res[len - 1][1];
+            let left =  v[0];
+            if left > right {
+                res.push(v);
+            } else {
+                res[len - 1][1] = v[1].max(right);
+            }
+        }
+        res
+    }
+
+    pub fn unique_paths(m: i32, n: i32) -> i32 {
+        // 动态规划
+        let mut dp = vec![vec![0; n as usize]; m as usize];
+        dp[0].iter_mut().for_each(|x| *x = 1);
+        for i in 0..m {
+            dp[i as usize][0] = 1;
+        }
+        for i in 1..m as usize {
+            for j in 1..n as usize {
+                dp[i][j] = dp[i - 1][j] + dp[i][j - 1];
+            }
+        }
+        dp[m as usize - 1][n as usize - 1]
+    }
+
+    pub fn unique_paths_with_obstacles(obstacle_grid: Vec<Vec<i32>>) -> i32 {
+        let m = obstacle_grid.len();
+        let n = obstacle_grid[0].len();
+        if m == 1 {
+            if obstacle_grid[0].contains(&1) {
+                return 0;
+            } else {
+                return 1;
+            }
+        }
+        if n == 1 {
+            if obstacle_grid.contains(&vec![1]) {
+                return 0;
+            } else {
+                return 1;
+            }
+        }
+        if obstacle_grid[0][0] == 1 { return 0; }
+        // 动态规划
+        let mut dp = vec![vec![0; n]; m];
+        for i in 0..n {
+            if obstacle_grid[0][i] == 1 {
+                dp[0][i..].iter_mut().for_each(|x| *x = 0);
+                break;
+            } else {
+                dp[0][i] = 1;
+            }
+        }
+        for i in 0..m {
+            if obstacle_grid[i][0] == 1 {
+                dp[i..].iter_mut().for_each(|v| v[0]  = 0);
+                break;
+            } else {
+                dp[i][0] = 1;
+            }
+        }
+        for i in 1..m as usize {
+            for j in 1..n as usize {
+                if obstacle_grid[i][j] == 1 {
+                    dp[i][j] = 0;
+                } else {
+                    dp[i][j] = dp[i - 1][j] + dp[i][j - 1];
+                }
+            }
+        }
+        dp[m - 1][n - 1]
     }
 }

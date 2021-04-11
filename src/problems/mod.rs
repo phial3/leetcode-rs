@@ -138,5 +138,14 @@ impl Problems {
     pub fn min_path_sum(grid: Vec<Vec<i32>>) -> i32 {
         todo!()
     }
+    pub fn merge(intervals: Vec<Vec<i32>>) -> Vec<Vec<i32>> {
+        todo!()
+    }
+    pub fn unique_paths(m: i32, n: i32) -> i32 {
+        todo!()
+    }
+    pub fn unique_paths_with_obstacles(obstacle_grid: Vec<Vec<i32>>) -> i32 {
+        todo!()
+    }
 }
 
