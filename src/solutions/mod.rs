@@ -1310,4 +1310,45 @@ impl Solutions {
         }
         dp[n][m]
     }
+
+    pub fn minimum_total(triangle: Vec<Vec<i32>>) -> i32 {
+        let mut dp = triangle.clone();
+        for i in 0..dp.len() {
+            if i == 0 {
+                continue;
+            }
+            let t = dp[i].len();
+            for j in 0..t {
+                if j == 0 {
+                    dp[i][j] += dp[i - 1][j];
+                } else if j == t - 1 {
+                    dp[i][j] += dp[i - 1][j - 1];
+                } else {
+                    dp[i][j] += dp[i - 1][j - 1].min(dp[i - 1][j]);
+                }
+            }
+        }
+        let mut res = dp[dp.len() - 1][0];
+        dp[dp.len() - 1].iter().for_each(|i| {
+            if *i < res {
+                res = *i;
+            }
+        });
+        res
+    }
+
+    pub fn word_break(s: String, word_dict: Vec<String>) -> bool {
+        let len = s.as_bytes().len();
+        let mut dp = vec![false; len + 1];
+        dp[0] = true;
+        for i in 1..len + 1 {
+            for j in 0..i {
+                if dp[j] && word_dict.contains(&String::from(&s[j..i])) {
+                    dp[i] = true;
+                    break;
+                }
+            }
+        }
+        dp[len]
+    }
 }

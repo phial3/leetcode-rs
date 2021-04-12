@@ -153,5 +153,11 @@ impl Problems {
     pub fn is_interleave(s1: String, s2: String, s3: String) -> bool {
         todo!()
     }
+    pub fn minimum_total(triangle: Vec<Vec<i32>>) -> i32 {
+        todo!()
+    }
+    pub fn word_break(s: String, word_dict: Vec<String>) -> bool {
+        todo!()
+    }
 }
 
