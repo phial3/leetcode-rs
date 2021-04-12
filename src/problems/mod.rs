@@ -147,5 +147,11 @@ impl Problems {
     pub fn unique_paths_with_obstacles(obstacle_grid: Vec<Vec<i32>>) -> i32 {
         todo!()
     }
+    pub fn num_decodings(s: String) -> i32 {
+        todo!()
+    }
+    pub fn is_interleave(s1: String, s2: String, s3: String) -> bool {
+        todo!()
+    }
 }
 

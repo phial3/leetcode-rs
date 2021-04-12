@@ -1249,4 +1249,65 @@ impl Solutions {
         }
         dp[m - 1][n - 1]
     }
+
+    pub fn num_decodings(s: String) -> i32 {
+        let mut v = s.as_bytes().to_vec();
+        v.iter_mut().for_each(|c| *c -= 48);
+        let len = v.len();
+        let mut dp = vec![0; len];
+        if v[0] == 0 {
+            return 0;
+        } else {
+            dp[0] = 1;
+        }
+        for i in 1..len {
+            if v[i] == 0 {
+                if v[i - 1] == 1 || v[i - 1] == 2 {
+                    // 可以与前一位结合
+                    if i == 1 {
+                        dp[i] = dp[0];
+                    } else {
+                        dp[i] = dp[i - 2];
+                    }
+                } else {
+                    return 0;
+                }
+            } else {
+                let d = v[i - 1] * 10 + v[i];
+                if d >= 11 && d <= 26 {
+                    if i == 1 {
+                        dp[i] = dp[0] + 1;
+                    } else {
+                        dp[i] = dp[i - 1] + dp[i - 2];
+                    }
+                } else {
+                    dp[i] = dp[i - 1];
+                }
+            }
+        }
+        dp[len - 1]
+    }
+
+    pub fn is_interleave(s1: String, s2: String, s3: String) -> bool {
+        let n = s1.len();
+        let m = s2.len();
+        let t = s3.len();
+        if m + n != t {
+            return false;
+        }
+        let mut dp = vec![vec![false; m + 1]; n + 1];
+        dp[0][0] = true;
+        for i in 0..n+1 {
+            for j in 0..m+1 {
+                let p = i + j - 1;
+                if i > 0 {
+                    dp[i][j] = dp[i][j] || dp[i - 1][j] && (s1.as_bytes()[i - 1] == s3.as_bytes()[p]);
+                }
+                if j > 0 {
+                    dp[i][j] = dp[i][j] || dp[i][j - 1] && (s2.as_bytes()[j - 1] == s3.as_bytes()[p]);
+                }
+            }
+        }
+        dp[n][m]
+    }
 }
