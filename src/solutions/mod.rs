@@ -1351,4 +1351,48 @@ impl Solutions {
         }
         dp[len]
     }
+
+    pub fn remove_duplicates(nums: &mut Vec<i32>) -> i32 {
+        if nums.is_empty() || nums.len() == 1 { return nums.len() as i32; }
+        let len = nums.len();
+        let mut slow = 2usize;
+        let mut fast = 2usize;
+        while fast < len {
+            if nums[slow - 2] != nums[fast] {
+                nums[slow] = nums[fast];
+                slow += 1;
+            }
+            fast += 1;
+        }
+        slow as i32
+    }
+
+    pub fn max_product(nums: Vec<i32>) -> i32 {
+        let len = nums.len();
+        let mut max_dp = nums.clone();
+        let mut min_dp = nums.clone();
+        for i in 1..len {
+            max_dp[i] = (max_dp[i - 1] * nums[i]).max(min_dp[i - 1] * nums[i]).max(nums[i]);
+            min_dp[i] = (max_dp[i - 1] * nums[i]).min(min_dp[i - 1] * nums[i]).min(nums[i]);
+        }
+        *max_dp.iter().max().unwrap()
+    }
+
+    pub fn rob(nums: Vec<i32>) -> i32 {
+        let len = nums.len();
+        if len == 0 {
+            return 0;
+        } else if len == 1 {
+            return nums[0];
+        } else if len == 2 {
+            return nums[0].max(nums[1]);
+        }
+        let mut dp = vec![0; len];
+        dp[0] = nums[0];
+        dp[1] = nums[0].max(nums[1]);
+        for i in 2..len {
+            dp[i] = (dp[i -2] + nums[i]).max(dp[i - 1]);
+        }
+        dp[len - 1]
+    }
 }
